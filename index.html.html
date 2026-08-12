@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>My Soror — Ton Mocktail selon ton Chemin de Vie</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=Lato:wght@300;400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #1A1A1A;
+    color: #F5EDE6;
+    font-family: 'Lato', sans-serif;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 40px 20px;
+  }
+
+  .stars {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
+  }
+
+  .star {
+    position: absolute;
+    background: #C9A96E;
+    border-radius: 50%;
+    animation: twinkle 3s infinite alternate;
+  }
+
+  @keyframes twinkle {
+    0% { opacity: 0.2; transform: scale(1); }
+    100% { opacity: 0.8; transform: scale(1.3); }
+  }
+
+  .container {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 600px;
+  }
+
+  .logo {
+    text-align: center;
+    margin-bottom: 40px;
+  }
+
+  .logo-script {
+    font-family: 'Playfair Display', serif;
+    font-style: italic;
+    font-size: 28px;
+    color: #C9A96E;
+    letter-spacing: 2px;
+  }
+
+  .logo-main {
+    font-family: 'Playfair Display', serif;
+    font-size: 52px;
+    font-weight: 700;
+    color: #F5EDE6;
+    letter-spacing: 8px;
+    line-height: 1;
+  }
+
+  .logo-sub {
+    font-size: 11px;
+    letter-spacing: 4px;
+    color: #C9A96E;
+    margin-top: 8px;
+  }
+
+  .logo-line {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 6px;
+  }
+
+  .logo-line hr {
+    border: none;
+    border-top: 0.5px solid #C9A96E;
+    width: 60px;
+  }
+
+  .card {
+    background: #111;
+    border: 0.5px solid #C9A96E;
+    border-radius: 12px;
+    padding: 40px;
+    margin-bottom: 24px;
+  }
+
+  .card-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px;
+    color: #C9A96E;
+    text-align: center;
+    margin-bottom: 8px;
+  }
+
+  .card-subtitle {
+    font-size: 13px;
+    color: #8B7355;
+    text-align: center;
+    letter-spacing: 1px;
+    margin-bottom: 32px;
+    line-height: 1.6;
+  }
+
+  .form-group {
+    margin-bottom: 24px;
+  }
+
+  label {
+    display: block;
+    font-size: 11px;
+    letter-spacing: 3px;
+    color: #C9A96E;
+    margin-bottom: 10px;
+  }
+
+  input[type="text"] {
+    width: 100%;
+    background: #1A1A1A;
+    border: 0.5px solid #C9A96E;
+    border-radius: 6px;
+    padding: 14px 18px;
+    color: #F5EDE6;
+    font-family: 'Lato', sans-serif;
+    font-size: 16px;
+    text-align: center;
+    letter-spacing: 4px;
+    outline: none;
+    transition: border-color 0.3s;
+  }
+
+  input[type="text"]:focus {
+    border-color: #F5EDE6;
+  }
+
+  input[type="text"]::placeholder {
+    color: #444;
+    letter-spacing: 2px;
+  }
+
+  .btn {
+    width: 100%;
+    background: #C9A96E;
+    color: #1A1A1A;
+    border: none;
+    border-radius: 6px;
+    padding: 16px;
+    font-family: 'Playfair Display', serif;
+    font-size: 15px;
+    letter-spacing: 3px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.1s;
+    margin-top: 8px;
+  }
+
+  .btn:hover { background: #E8C97E; }
+  .btn:active { transform: scale(0.98); }
+
+  .error {
+    color: #F4A7B4;
+    font-size: 12px;
+    text-align: center;
+    margin-top: 12px;
+    letter-spacing: 1px;
+    display: none;
+  }
+
+  .result {
+    display: none;
+    background: #111;
+    border: 0.5px solid #C9A96E;
+    border-radius: 12px;
+    padding: 40px;
+    text-align: center;
+    animation: fadeIn 0.8s ease;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .chemin-numero {
+    font-family: 'Playfair Display', serif;
+    font-size: 72px;
+    font-weight: 700;
+    color: #C9A96E;
+    line-height: 1;
+  }
+
+  .chemin-label {
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: #8B7355;
+    margin-top: 4px;
+    margin-bottom: 6px;
+  }
+
+  .chemin-nom {
+    font-family: 'Playfair Display', serif;
+    font-size: 20px;
+    color: #F5EDE6;
+    margin-bottom: 24px;
+  }
+
+  .divider {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 20px 0;
+  }
+
+  .divider hr {
+    flex: 1;
+    border: none;
+    border-top: 0.5px solid #333;
+  }
+
+  .divider span {
+    color: #C9A96E;
+    font-size: 14px;
+  }
+
+  .mocktail-lame {
+    font-size: 10px;
+    letter-spacing: 4px;
+    color: #C9A96E;
+    margin-bottom: 6px;
+  }
+
+  .mocktail-nom {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px;
+    color: #C9A96E;
+    margin-bottom: 8px;
+  }
+
+  .mocktail-profil {
+    font-size: 13px;
+    color: #8B7355;
+    font-style: italic;
+    margin-bottom: 20px;
+    letter-spacing: 1px;
+  }
+
+  .mocktail-desc {
+    font-size: 14px;
+    color: #F5EDE6;
+    line-height: 1.8;
+    margin-bottom: 20px;
+  }
+
+  .ingredients-title {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: #C9A96E;
+    margin-bottom: 12px;
+  }
+
+  .ingredients-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 24px;
+  }
+
+  .ingredient-tag {
+    background: #1A1A1A;
+    border: 0.5px solid #C9A96E;
+    border-radius: 20px;
+    padding: 4px 14px;
+    font-size: 12px;
+    color: #C9A96E;
+    letter-spacing: 1px;
+  }
+
+  .vibration-box {
+    background: #1A1A1A;
+    border-left: 3px solid #C9A96E;
+    border-radius: 4px;
+    padding: 16px 20px;
+    margin-bottom: 24px;
+    text-align: left;
+  }
+
+  .vibration-title {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: #C9A96E;
+    margin-bottom: 8px;
+  }
+
+  .vibration-text {
+    font-size: 13px;
+    color: #8B7355;
+    line-height: 1.7;
+    font-style: italic;
+  }
+
+  .btn-retry {
+    background: transparent;
+    border: 0.5px solid #C9A96E;
+    color: #C9A96E;
+    border-radius: 6px;
+    padding: 12px 24px;
+    font-family: 'Playfair Display', serif;
+    font-size: 13px;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s;
+    margin-top: 8px;
+  }
+
+  .btn-retry:hover {
+    background: #C9A96E;
+    color: #1A1A1A;
+  }
+
+  .how-to {
+    background: #111;
+    border: 0.5px solid #333;
+    border-radius: 12px;
+    padding: 24px 32px;
+    margin-bottom: 24px;
+  }
+
+  .how-to-title {
+    font-size: 10px;
+    letter-spacing: 3px;
+    color: #C9A96E;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+
+  .how-to-step {
+    display: flex;
+    gap: 16px;
+    align-items: flex-start;
+    margin-bottom: 12px;
+  }
+
+  .step-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 18px;
+    color: #C9A96E;
+    min-width: 24px;
+    line-height: 1.4;
+  }
+
+  .step-text {
+    font-size: 13px;
+    color: #8B7355;
+    line-height: 1.6;
+  }
+
+  .footer {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 11px;
+    letter-spacing: 2px;
+    color: #444;
+  }
+</style>
+</head>
+<body>
+
+<div class="stars" id="stars"></div>
+
+<div class="container">
+
+  <div class="logo">
+    <div class="logo-script">My</div>
+    <div class="logo-main">SOROR</div>
+    <div class="logo-line">
+      <hr><span style="color:#C9A96E;font-size:12px">♥</span><hr>
+    </div>
+    <div class="logo-sub">by Stéphanie Estève</div>
+  </div>
+
+  <div class="how-to">
+    <div class="how-to-title">COMMENT ÇA MARCHE ?</div>
+    <div class="how-to-step">
+      <div class="step-num">1</div>
+      <div class="step-text">Entre ta date de naissance (JJ/MM/AAAA)</div>
+    </div>
+    <div class="how-to-step">
+      <div class="step-num">2</div>
+      <div class="step-text">On calcule ton chemin de vie en numérologie — la somme de tous tes chiffres réduite à un nombre essentiel (11, 22 et 33 ne sont jamais réduits, ce sont des maîtres nombres)</div>
+    </div>
+    <div class="how-to-step">
+      <div class="step-num">3</div>
+      <div class="step-text">On te révèle le mocktail Soror qui vibre avec ton énergie ✦</div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="card-title">✦ Ton Chemin de Vie ✦</div>
+    <div class="card-subtitle">La numérologie révèle qui tu es.<br>My Soror révèle ce que tu bois.</div>
+
+    <div class="form-group">
+      <label>TA DATE DE NAISSANCE</label>
+      <input type="text" id="dateInput" placeholder="JJ / MM / AAAA" maxlength="10">
+    </div>
+
+    <button class="btn" onclick="calculer()">RÉVÈLE MON MOCKTAIL ✦</button>
+    <div class="error" id="error">Date invalide — essaie au format JJ/MM/AAAA</div>
+  </div>
+
+  <div class="result" id="result">
+    <div class="chemin-label">TON CHEMIN DE VIE</div>
+    <div class="chemin-numero" id="res-numero"></div>
+    <div class="chemin-nom" id="res-nom-chemin"></div>
+
+    <div class="divider"><hr><span>✦</span><hr></div>
+
+    <div class="mocktail-lame" id="res-lame"></div>
+    <div class="mocktail-nom" id="res-mocktail"></div>
+    <div class="mocktail-profil" id="res-profil"></div>
+    <div class="mocktail-desc" id="res-desc"></div>
+
+    <div class="vibration-box">
+      <div class="vibration-title">TA VIBRATION</div>
+      <div class="vibration-text" id="res-vibration"></div>
+    </div>
+
+    <div class="ingredients-title">TES INGRÉDIENTS</div>
+    <div class="ingredients-list" id="res-ingredients"></div>
+
+    <div class="divider"><hr><span>✦</span><hr></div>
+
+    <button class="btn-retry" onclick="recommencer()">← Recommencer</button>
+  </div>
+
+  <div style="text-align:center;margin-top:24px;margin-bottom:16px;">
+    <a href="https://www.instagram.com/mysoror_by_stephanie.esteve?igsh=MWplMHBzbnhueTV2ag==" target="_blank" style="
+      display:inline-flex;align-items:center;gap:12px;
+      background:#C9A96E;color:#1A1A1A;text-decoration:none;
+      padding:16px 32px;border-radius:6px;
+      font-family:'Playfair Display',serif;font-size:14px;
+      letter-spacing:2px;font-weight:700;">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#1A1A1A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <rect x="2" y="2" width="20" height="20" rx="5" ry="5"/>
+        <circle cx="12" cy="12" r="4"/>
+        <circle cx="17.5" cy="6.5" r="1" fill="#1A1A1A" stroke="none"/>
+      </svg>
+      Rejoignez l'univers My Soror → Instagram
+    </a>
+  </div>
+  <div class="footer">MY SOROR MOCKTAILS · 100% SANS ALCOOL · @mysoror_mocktails</div>
+
+</div>
+
+<script>
+const mocktails = {
+  1: {
+    nomChemin: "Le Pionnier",
+    lame: "La Force · Lame VIII",
+    mocktail: "La Force",
+    profil: "Intense · Épicé · Qui s'affirme",
+    desc: "Comme toi, ce mocktail ne passe pas inaperçu. Il s'impose avec caractère, chaleur et une énergie qui réveille les sens. Pour ceux qui osent.",
+    vibration: "Tu es un leader né, pionnier dans l'âme. Tu traces ta propre route avec courage et détermination. Tu n'as pas besoin de validation — tu sais qui tu es.",
+    ingredients: ["Orange sanguine", "Gingembre frais", "Grenadine", "Romarin", "Fleur d'oranger", "Eau pétillante"]
+  },
+  2: {
+    nomChemin: "Le Diplomate",
+    lame: "La Prêtresse · Lame II",
+    mocktail: "La Prêtresse",
+    profil: "Délicat · Floral · Enveloppant",
+    desc: "Tout en subtilité et en douceur, ce mocktail parle à ton âme sensible. Floral, délicat, il révèle la beauté dans les détails — comme tu sais si bien le faire.",
+    vibration: "Sensible et intuitif·ve, tu perçois ce que les autres ne voient pas. Tu crées l'harmonie autour de toi avec une douceur naturelle et une profonde empathie.",
+    ingredients: ["Sirop de rose", "Sirop de litchi", "Fleur d'oranger", "Citron", "Eau pétillante", "Pétale de rose"]
+  },
+  11: {
+    nomChemin: "Le Maître Intuitif",
+    lame: "L'Étoile · Lame XVII",
+    mocktail: "L'Étoile",
+    profil: "Profond · Lumineux · Bordeaux naturel",
+    desc: "Rare et précieux comme ton chemin, ce mocktail brille d'une couleur bordeaux naturelle née de l'hibiscus. Intense, lumineux, il incarne ta lumière intérieure.",
+    vibration: "Tu portes une lumière rare. Maître nombre, tu as une mission d'élévation — inspirer, guider, illuminer les autres. Ta sensibilité est ta plus grande force.",
+    ingredients: ["Hibiscus infusé", "Fruits rouges", "Citron", "Miel", "Eau pétillante", "Fleur d'hibiscus"]
+  },
+  3: {
+    nomChemin: "Le Créatif",
+    lame: "Le Soleil · Lame XIX",
+    mocktail: "Le Soleil",
+    profil: "Solaire · Vif · Pétillant de vie",
+    desc: "Comme ton énergie débordante, ce mocktail explose de vie et de couleurs. Tropical, joyeux, il est aussi irrésistible que ton sourire communicatif.",
+    vibration: "Tu rayonnes naturellement. Créatif·ve, expressif·ve, tu portes la joie autour de toi. Ta légèreté n'est pas superficielle — c'est un don que tu offres au monde.",
+    ingredients: ["Mangue fraîche", "Fruit de la passion", "Citron vert", "Gingembre frais", "Eau pétillante"]
+  },
+  4: {
+    nomChemin: "Le Bâtisseur",
+    lame: "Le Mat · Lame 0",
+    mocktail: "Le Mat",
+    profil: "Frais · Herbacé · Ancré dans la nature",
+    desc: "Solide comme tes fondations, ce mocktail est ancré dans la nature, frais et honnête. Pas de chichi — juste l'essentiel, parfaitement équilibré.",
+    vibration: "Tu construis, tu structures, tu bâtis dans la durée. Ta fiabilité est ton trésor. Là où les autres abandonnent, toi tu continues — et tu réussis.",
+    ingredients: ["Concombre", "Citron vert", "Basilic frais", "Sirop d'agave", "Eau pétillante"]
+  },
+  22: {
+    nomChemin: "Le Maître Bâtisseur",
+    lame: "L'Alchimiste · Lame ∞",
+    mocktail: "L'Alchimiste",
+    profil: "Intense · Complexe · Transformateur",
+    desc: "Pour les grandes âmes, un grand mocktail. L'Alchimiste transforme le simple en extraordinaire — comme tu transformes chaque défi en chef-d'œuvre.",
+    vibration: "Tu es ici pour bâtir quelque chose qui dépasse l'individu. Maître nombre, ta vision est universelle, ton impact durable. Tu ne fais pas les choses à moitié.",
+    ingredients: ["Vodka Lyre's 0%", "Cold brew colombien", "Sirop de canne", "Mousse de café", "Grains de café"]
+  },
+  5: {
+    nomChemin: "L'Aventurier",
+    lame: "Le Navigateur · Lame V",
+    mocktail: "Le Navigateur",
+    profil: "Frais · Voyageur · Libre",
+    desc: "Impossible à enfermer dans une case — comme toi. Ce mojito réinventé voyage, s'évade, surprend. Il est fait pour ceux qui n'aiment pas rester en place.",
+    vibration: "La liberté est ton oxygène. Tu explores, tu voyages, tu expérimentes. Chaque nouvelle expérience t'enrichit. Tu es né·e pour vivre mille vies en une.",
+    ingredients: ["Rhum Lyre's 0%", "Menthe fraîche", "Citron vert", "Sucre de canne", "Eau pétillante"]
+  },
+  6: {
+    nomChemin: "Le Nourricier",
+    lame: "La Lune · Lame XVIII",
+    mocktail: "La Lune",
+    profil: "Doux · Crémeux · Réconfortant",
+    desc: "Enveloppant et chaleureux comme tes bras ouverts, ce mocktail prend soin de toi. Tropical, onctueux, il nourrit l'âme autant que le corps.",
+    vibration: "Tu es le cœur de tout ce qui t'entoure. Famille, amis, communauté — tu prends soin de tous avec amour et générosité. Ton foyer est ton sanctuaire.",
+    ingredients: ["Eau de coco", "Ananas frais", "Citron vert", "Menthe fraîche", "Eau pétillante"]
+  },
+  33: {
+    nomChemin: "Le Maître Guérisseur",
+    lame: "La Grâce · Lame ✦",
+    mocktail: "La Grâce",
+    profil: "Pur · Floral · Sans sucre ajouté",
+    desc: "Pur comme ton amour inconditionnel, ce mocktail ne masque rien. Hibiscus, citron, menthe — l'essence brute de la nature, sans artifice. Comme toi.",
+    vibration: "Tu es ici pour guérir, élever, transformer par l'amour pur. Maître nombre rare, tu portes une responsabilité immense et un don exceptionnel de compassion.",
+    ingredients: ["Hibiscus infusé", "Citron", "Menthe fraîche", "Eau pétillante", "Érythritol", "🌿 IG bas"]
+  },
+  7: {
+    nomChemin: "Le Mystique",
+    lame: "La Conquête · Lame VII",
+    mocktail: "La Conquête",
+    profil: "Mystérieux · Complexe · Inattendu",
+    desc: "Pour les esprits profonds qui ne se livrent pas facilement. Ce mocktail surprend, intrigue, interroge — comme toi quand on croit te connaître.",
+    vibration: "Tu explores les profondeurs de l'existence que d'autres ignorent. Solitaire par choix, tu accumules une sagesse rare. Ta quête intérieure est ton plus grand voyage.",
+    ingredients: ["Tequila Lyre's 0%", "Citron vert", "Triple sec 0%", "Sel de bord", "Glaçons"]
+  },
+  8: {
+    nomChemin: "L'Ambitieux",
+    lame: "L'Équinoxe · Lame VIII",
+    mocktail: "L'Équinoxe",
+    profil: "Luxueux · Élégant · Festif",
+    desc: "Pour ceux qui visent les sommets, rien que le meilleur. Ce Spritz au Prosecco 0% est l'image de ta vie — élégant, festif, qui ne passe jamais inaperçu.",
+    vibration: "Le succès est dans ton ADN. Tu sais ce que tu veux et tu sais comment l'obtenir. L'abondance n'est pas un rêve pour toi — c'est un objectif que tu atteins.",
+    ingredients: ["Prosecco Oddbird 0%", "Aperol sans alcool", "Eau pétillante", "Rondelle d'orange", "Glaçons"]
+  },
+  9: {
+    nomChemin: "L'Humaniste",
+    lame: "L'Évidence · Lame IX",
+    mocktail: "L'Évidence",
+    profil: "Universel · Pur · Essentiel",
+    desc: "L'essence pure de ce qui compte vraiment. Pas de fioriture, juste la vérité — citron, gingembre, curcuma. Comme ton regard sur le monde : direct et essentiel.",
+    vibration: "Tu appartiens à tous. Ton amour dépasse les frontières, les cultures, les différences. Tu es en fin de cycle, porteur·se d'une sagesse universelle et d'une humanité profonde.",
+    ingredients: ["Citron pressé", "Gingembre frais", "Curcuma", "Eau pétillante", "Stévia", "🌿 IG bas"]
+  }
+};
+
+function formatDate(val) {
+  val = val.replace(/\D/g, '');
+  if (val.length >= 3 && val.length <= 4) val = val.slice(0,2) + '/' + val.slice(2);
+  if (val.length >= 5) val = val.slice(0,2) + '/' + val.slice(2,4) + '/' + val.slice(4,8);
+  return val;
+}
+
+document.getElementById('dateInput').addEventListener('input', function() {
+  this.value = formatDate(this.value);
+});
+
+function calculerChemin(j, m, a) {
+  const tous = (j + m + a).toString().split('').map(Number);
+  let somme = tous.reduce((s, n) => s + n, 0);
+  while (somme > 9 && somme !== 11 && somme !== 22 && somme !== 33) {
+    somme = somme.toString().split('').map(Number).reduce((s, n) => s + n, 0);
+  }
+  return somme;
+}
+
+function calculer() {
+  const input = document.getElementById('dateInput').value;
+  const err = document.getElementById('error');
+  const res = document.getElementById('result');
+  const card = document.querySelector('.card');
+
+  err.style.display = 'none';
+  res.style.display = 'none';
+
+  const parts = input.replace(/\s/g,'').split('/');
+  if (parts.length !== 3) { err.style.display = 'block'; return; }
+
+  const j = parseInt(parts[0]);
+  const m = parseInt(parts[1]);
+  const a = parseInt(parts[2]);
+
+  if (isNaN(j)||isNaN(m)||isNaN(a)||j<1||j>31||m<1||m>12||a<1900||a>2100) {
+    err.style.display = 'block'; return;
+  }
+
+  const chemin = calculerChemin(j, m, a);
+  const data = mocktails[chemin];
+  if (!data) { err.style.display = 'block'; return; }
+
+  document.getElementById('res-numero').textContent = chemin;
+  document.getElementById('res-nom-chemin').textContent = data.nomChemin;
+  document.getElementById('res-lame').textContent = data.lame;
+  document.getElementById('res-mocktail').textContent = data.mocktail;
+  document.getElementById('res-profil').textContent = data.profil;
+  document.getElementById('res-desc').textContent = data.desc;
+  document.getElementById('res-vibration').textContent = data.vibration;
+
+  const ingList = document.getElementById('res-ingredients');
+  ingList.innerHTML = '';
+  data.ingredients.forEach(ing => {
+    const tag = document.createElement('span');
+    tag.className = 'ingredient-tag';
+    tag.textContent = ing;
+    ingList.appendChild(tag);
+  });
+
+  card.style.display = 'none';
+  res.style.display = 'block';
+  res.scrollIntoView({ behavior: 'smooth' });
+}
+
+function recommencer() {
+  document.getElementById('result').style.display = 'none';
+  document.querySelector('.card').style.display = 'block';
+  document.getElementById('dateInput').value = '';
+  document.querySelector('.card').scrollIntoView({ behavior: 'smooth' });
+}
+
+// Étoiles
+const starsContainer = document.getElementById('stars');
+for (let i = 0; i < 40; i++) {
+  const star = document.createElement('div');
+  star.className = 'star';
+  const size = Math.random() * 2.5 + 0.5;
+  star.style.cssText = `
+    width: ${size}px; height: ${size}px;
+    top: ${Math.random() * 100}%;
+    left: ${Math.random() * 100}%;
+    animation-delay: ${Math.random() * 3}s;
+    animation-duration: ${2 + Math.random() * 3}s;
+  `;
+  starsContainer.appendChild(star);
+}
+</script>
+</body>
+</html>
