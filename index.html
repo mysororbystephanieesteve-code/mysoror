@@ -589,8 +589,8 @@ document.getElementById('dateInput').addEventListener('input', function() {
 });
 
 function calculerChemin(j, m, a) {
-  const tous = (j + m + a).toString().split('').map(Number);
-  let somme = tous.reduce((s, n) => s + n, 0);
+  const tousChiffres = (String(j).padStart(2,'0') + String(m).padStart(2,'0') + String(a)).split('').map(Number);
+  let somme = tousChiffres.reduce((s, n) => s + n, 0);
   while (somme > 9 && somme !== 11 && somme !== 22 && somme !== 33) {
     somme = somme.toString().split('').map(Number).reduce((s, n) => s + n, 0);
   }
